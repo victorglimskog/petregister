@@ -19,7 +19,7 @@ const db = pm(
   }
 );
 
-app.get('/petowners', async function(req,res) {
+app.get('/', async function(req,res) {
     let result = await query('SELECT * FROM petowners');
     console.log(result);
     res.json(result);
