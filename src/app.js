@@ -32,8 +32,8 @@ app.get('/pets/:pnr', async function(req,res) {
     res.json(result);
 });
 
-app.listen(3000, () => {
-    console.log('app listening on port 3000');
+app.listen(7000, () => {
+    console.log('app listening on port 7000');
 });
 
 // a helper function that makes query syntax shorter
