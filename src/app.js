@@ -20,7 +20,7 @@ const db = pm(
 );
 
 app.get('/', async function(req,res) {
-    let result = await query('SELECT * FROM petowners');
+    let result = await query('SELECT * FROM petOwners');
     console.log(result);
     res.json(result);
 });
