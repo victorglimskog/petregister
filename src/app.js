@@ -19,15 +19,15 @@ const db = pm(
   }
 );
 
-app.get('/', async function(req,res) {
+app.use(express.static(__dirname + '/www'));
+
+app.get('/petowners', async function(req,res) {
     let result = await query('SELECT * FROM petOwners');
-    console.log(result);
     res.json(result);
 });
 
 app.get('/pets/:pnr', async function(req,res) {
     const pnr = req.params.pnr;
-    console.log(pnr);
     let result = await query('SELECT * FROM petsandowners WHERE pnr = ' + pnr);
     res.json(result);
 });
