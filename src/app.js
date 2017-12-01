@@ -1,6 +1,7 @@
 const pm = require('promisemaker');
 const mysql = require('mysql');
 const express = require('express');
+const bodyparser = require('body-parser');
 const app = express();
 
 // Create a connection
@@ -20,6 +21,7 @@ const db = pm(
 );
 
 app.use(express.static(__dirname + '/www'));
+app.use(bodyparser.json());
 
 app.get('/petowners', async function(req,res) {
     let result = await query('SELECT * FROM petOwners');
@@ -29,6 +31,13 @@ app.get('/petowners', async function(req,res) {
 app.get('/pets/:pnr', async function(req,res) {
     const pnr = req.params.pnr;
     let result = await query('SELECT * FROM petsandowners WHERE pnr = ' + pnr);
+    res.json(result);
+});
+
+app.post('/owners', async function(req,res) {
+    const owner = req.body;
+    console.log(owner);
+    const result = await query('INSERT INTO petOwners SET ?',[owner]);
     res.json(result);
 });
 

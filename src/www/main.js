@@ -21,12 +21,36 @@ $(document).ready(function(){
     $('body').on('click', 'li', function() {
         loadOwnerData($(this).data('id'));
     });
+
+    $('.add-owner-title').click(function() {
+        $('.add-owner').show();
+    });
+
+    $('body').on('click', '.add-owner-btn', function() {
+        const firstName = $('#firstName').val();
+        const lastName = $('#lastName').val();
+        const pnr = $('#pnr').val();
+        $.ajax({
+            url: '/owners',
+            type: 'POST',
+            data: JSON.stringify({
+                pnr: pnr,
+                firstName: firstName,
+                lastName: lastName
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function() {
+                console.log('Successfully added owner');
+            }
+        });
+        location.reload();
+    });
 });
 
 function loadOwnerData(ownerPnr) {
     $('.owner-data').empty();
     $.getJSON('/pets/' + ownerPnr, function(data) {
-        console.log(data);
         if(data && data.length){
             data.forEach((pet) => {
                 $('.owner-data').append(`
