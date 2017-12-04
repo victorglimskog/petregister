@@ -1,2 +1,2 @@
 # petregister
-Small petregister with mysql for school purposes
+Dev branch of the petregister app. 
