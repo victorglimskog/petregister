@@ -36,7 +36,6 @@ app.get('/pets/:pnr', async function(req,res) {
 
 app.post('/owners', async function(req,res) {
     const owner = req.body;
-    console.log(owner);
     const result = await query('INSERT INTO petOwners SET ?',[owner]);
     res.json(result);
 });
