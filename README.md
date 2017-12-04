@@ -1,2 +1,2 @@
 # petregister
-Dev branch of the petregister app. 
+Dev branch of the petregister app. Use it for dev needs.
