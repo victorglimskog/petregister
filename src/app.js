@@ -5,13 +5,15 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const app = express();
 
+const config = require('./config.json');
+
 // Create a connection
 const db = pm(
   mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    host: config.dbHost,
+    user: config.dbUser,
+    password: config.dbPass,
+    database: config.dbName
   }),
   {
     rejectOnErrors: false,
