@@ -1,3 +1,4 @@
+require('dotenv').config();
 const pm = require('promisemaker');
 const mysql = require('mysql');
 const express = require('express');
@@ -7,10 +8,10 @@ const app = express();
 // Create a connection
 const db = pm(
   mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "myskul",
-    database: "petregister"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
   }),
   {
     rejectOnErrors: false,
@@ -24,7 +25,22 @@ app.use(express.static(__dirname + '/www'));
 app.use(bodyparser.json());
 
 app.get('/petowners', async function(req,res) {
-    let result = await query('SELECT * FROM petOwners');
+    const result = await query('SELECT * FROM petOwners');
+    res.json(result);
+});
+
+app.get('/petowners/:pnr', async function(req,res) {
+    const result = await query(`
+        SELECT * FROM petOwners
+        WHERE pnr = ?
+    `,[req.params.pnr]);
+    res.json(result);
+});
+
+app.delete('/petowners/:pnr', async function(req,res) {
+    const result = await query(`
+        DELETE FROM petOwners WHERE pnr = ?
+    `,[req.params.pnr]);
     res.json(result);
 });
 
@@ -34,7 +50,7 @@ app.get('/pets/:pnr', async function(req,res) {
     res.json(result);
 });
 
-app.post('/owners', async function(req,res) {
+app.post('/petowners', async function(req,res) {
     const owner = req.body;
     const result = await query('INSERT INTO petOwners SET ?',[owner]);
     res.json(result);
