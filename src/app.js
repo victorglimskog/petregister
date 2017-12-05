@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: __dirname + '/.env'});
 const pm = require('promisemaker');
 const mysql = require('mysql');
 const express = require('express');
