@@ -1,4 +1,3 @@
-require('dotenv').config();
 const pm = require('promisemaker');
 const mysql = require('mysql');
 const express = require('express');
@@ -39,22 +38,40 @@ app.get('/petowners/:pnr', async function(req,res) {
     res.json(result);
 });
 
-app.delete('/petowners/:pnr', async function(req,res) {
+app.post('/petowners', async function(req, res) {
+    const owner = req.body;
+    const result = await query('INSERT INTO petOwners SET ?',[owner]);
+    res.json(result);
+});
+
+app.delete('/petowners/:pnr', async function(req, res) {
     const result = await query(`
         DELETE FROM petOwners WHERE pnr = ?
     `,[req.params.pnr]);
     res.json(result);
 });
 
-app.get('/pets/:pnr', async function(req,res) {
+app.get('/pets/:pnr', async function(req, res) {
     const pnr = req.params.pnr;
-    let result = await query('SELECT * FROM petsandowners WHERE pnr = ' + pnr);
+    let result = await query('SELECT * FROM petsandowners2 WHERE pnr = ' + pnr);
     res.json(result);
 });
 
-app.post('/petowners', async function(req,res) {
-    const owner = req.body;
-    const result = await query('INSERT INTO petOwners SET ?',[owner]);
+app.post('/pets', async function(req, res) {
+    const pet = req.body.pet;
+    const ownerPnr = req.body.pnr;
+    const result = await query('INSERT INTO pets SET ?', [pet]);
+    const result2 = await query('INSERT INTO petOwnersPetsRelations SET ?', [{
+        pnr: ownerPnr,
+        petId: result.insertId
+    }]);
+    res.json({"msg":"Added pet successfully"});
+});
+
+app.delete('/pets/:id', async function(req, res) {
+    const result = await query(`
+        DELETE FROM pets WHERE id = ?
+    `, [req.params.id]);
     res.json(result);
 });
 

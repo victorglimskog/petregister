@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    let activeOwnerPnr;
+
     $.getJSON('/petowners', (data) => {
 
         data.sort((a,b) => {
@@ -21,15 +23,17 @@ $(document).ready(function(){
     });
 
     $('body').on('click', 'li', function() {
-        loadOwnerData($(this).data('id'));
+        const pnr = $(this).data('id');
+        loadOwnerData(pnr);
+        activeOwnerPnr = pnr;
+        console.log('active: ', activeOwnerPnr);
     });
 
     $('.add-owner-title').click(function() {
         $('.add-owner').show();
     });
 
-    $('body').on('click', '.add-pet-btn', function() {
-        console.log('hej');
+    $('body').on('click', '.show-add-pet-btn', function() {
         $('.add-pet').show();
     });
 
@@ -54,17 +58,57 @@ $(document).ready(function(){
         location.reload();
     });
 
-    $('body').on('click', '.delete-owner-btn', function() {
-        const pnr = $('.delete-owner-btn').data('id');
-        console.log(pnr);
+    $('body').on('click', '.add-pet-btn', function() {
+        const name = $('#name').val();
+        const birthDate = $('#birthDate').val();
+        const species = $('#species').val();
+        const race = $('#race').val();
+        console.log(name,birthDate,species,race);
         $.ajax({
-            url: '/petowners/' + pnr,
+            url: '/pets',
+            type: 'POST',
+            data: JSON.stringify({
+                pet: {
+                    name: name,
+                    birthDate: birthDate,
+                    species: species,
+                    race: race
+                },
+                pnr: activeOwnerPnr
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function() {
+                console.log('Successfully added pet to owner');
+                $('.add-pet').find('input').val('');
+                $('.add-pet').hide();
+                loadOwnerData(activeOwnerPnr);
+            }
+        });
+    });
+
+    $('body').on('click', '.delete-owner-btn', function() {
+        $.ajax({
+            url: '/petowners/' + activeOwnerPnr,
             type: 'DELETE',
             success: function() {
                 console.log('Successfully deleted owner');
             }
         });
         location.reload();
+    });
+
+    $('body').on('click', '.delete-pet-btn', function() {
+        const petId = $(this).closest('.pet').data('id');
+        console.log(petId);
+        $.ajax({
+            url: '/pets/' + petId,
+            type: 'DELETE',
+            success: function() {
+                console.log('Successfully deleted owner');
+            }
+        });
+        loadOwnerData(activeOwnerPnr);
     });
 });
 
@@ -80,13 +124,16 @@ function loadOwnerData(ownerPnr) {
     });
 
     $.getJSON('/pets/' + ownerPnr, function(data) {
-        if(data && data.length){
+        if (data && data.length) {
             data.forEach((pet) => {
                 $('.owner-data').append(`
-                    <div class="pet">
+                    <div class="pet" data-id="${pet.id}">
                         <h4>${pet.petName}</h4>
-                        <p>${pet.species}</p>
-                        <p>${pet.race}</p>
+                        <p>Species: ${pet.species}</p>
+                        <p>Race: ${pet.race}</p>
+                        <button class="delete-pet-btn">
+                            Delete this pet
+                        </button>
                     </div>
                 `);
             });
@@ -97,10 +144,7 @@ function loadOwnerData(ownerPnr) {
                 </div>
             `);
         }
-        $('.owner-data').append(`
-            <button class="delete-owner-btn" data-id="${ownerPnr}">Delete owner</button>
-            <button class="add-pet-btn">Add new Pet</button>
-        `);
+        $('.owner-controls').show();
     });
     $('.owner-data').show();
 }

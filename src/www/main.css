@@ -96,6 +96,10 @@ h4 {
     color: #7FDBFF;
 }
 
+.owner-controls {
+    display: none;
+}
+
 label {
     font-size: 12px;
 }
@@ -110,6 +114,7 @@ input {
 
 button {
     border: 0;
+    border-radius: 3px;
     color: white;
     font-size: 16px;
     margin-top: 20px;
@@ -120,11 +125,11 @@ button {
     margin-top: 20px;
 }
 
-.add-owner-btn, .add-pet-btn {
+.add-owner-btn, .show-add-pet-btn, .add-pet-btn {
     background-color: #0074D9;
 }
 
-.delete-owner-btn {
+.delete-owner-btn, .delete-pet-btn {
     background-color: red;
 }
 

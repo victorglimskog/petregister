@@ -27,8 +27,8 @@
                         <input type="text" size="36" class="input" id="lastName"></input>
                     </div>
                     <div class="form-group">
-                        <label>Pnr</label>
-                        <input type="text" size="10" class="input" id="pnr"></input>
+                        <label>Social Security Number (YYYYMMDDXXXX)</label>
+                        <input type="text" maxlength="12" size="28" class="input" id="pnr"></input>
                     </div>
                     <button class="add-owner-btn">Add owner</button>
                 </div>
@@ -36,14 +36,19 @@
             <div class="owner-data-box half">
                 <div class="owner-data">
                 </div>
+                <div class="owner-controls">
+                    <h4>Edit owner</h4>
+                    <button class="delete-owner-btn">Delete owner</button>
+                    <button class="show-add-pet-btn">Add new Pet</button>
+                </div>
                 <div class="add-pet">
                     <div class="form-group">
                         <label>Name</label>
                         <input type="text" size="36" class="input" id="name"></input>
                     </div>
                     <div class="form-group">
-                        <label>Birthdate</label>
-                        <input type="text" size="36" class="input" id="birthDate"></input>
+                        <label>Birthdate (YYYYMMDD)</label>
+                        <input type="text" maxlength="8"size="36" class="input" id="birthDate"></input>
                     </div>
                     <div class="form-group">
                         <label>Species</label>
